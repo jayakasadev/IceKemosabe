@@ -9,6 +9,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 /**
+ * Class pulls up an radar image for Sea Ice for Barrow Alaska
+ *
  * @author Jaya Kasa
  * @version 1.0
  */
@@ -25,6 +27,11 @@ public class LoadExtBarrowIce{
         }
     }
 
+    /**
+     * Static method for getting instace of Loader
+     *
+     * @return LoadExtBarrowIce
+     */
     public static LoadExtBarrowIce getInstance(){
         if(loadExtBarrowIce == null){
             loadExtBarrowIce = new LoadExtBarrowIce();
@@ -32,27 +39,45 @@ public class LoadExtBarrowIce{
         return loadExtBarrowIce;
     }
 
-
-    public Object getData(){
+    /**
+     * Method for loading image into data/img directory
+     */
+    public void getData(){
         RenderedImage image = null;
 
         try {
-            image = ImageIO.read(urlObj);
-            System.out.println(this.getClass() + " --> class of image: " + image.getClass());
+            //image = ImageIO.read(urlObj);
+            InputStream inputStream = urlObj.openStream();
+            //System.out.println(this.getClass() + " --> class of image: " + image.getClass());
 
-            //OutputStream outputStream = new BufferedOutputStream(new FileOutputStream("/data/img"));
-            File file = new File("/data/img");
+            String path = System.getProperty("user.dir") + "/KemosabeBackend/data/img";
+            File file = new File(path);
 
             if(!file.exists()){
-                System.out.println("creating /data/img");
+                System.out.println("creating /data/img/radar.img");
                 file.mkdirs();
             }
 
-            ImageIO.write(image, "png", file);
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+
+            byte[] b = new byte[2048];
+            int length;
+
+            while ((length = inputStream.read(b)) != -1) {
+                outputStream.write(b, 0, length);
+            }
+
+            inputStream.close();
+            outputStream.close();
+
+            byte[] response = outputStream.toByteArray();
+
+            FileOutputStream fileOutputStream = new FileOutputStream(path + "/radar.png");
+            fileOutputStream.write(response);
+            fileOutputStream.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return image;
     }
 
 }
