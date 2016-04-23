@@ -5,7 +5,6 @@ package extData;
  * @verion 1.0
  */
 public interface NOAACommands {
-    String url = "http://www.ncdc.noaa.gov/cdo-web/api/v2";
     String datasets = "/datasets";
     String datacategories = "/datacategories";
     String datatypes = "/datatypes";

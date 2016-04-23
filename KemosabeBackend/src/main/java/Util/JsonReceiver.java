@@ -34,11 +34,11 @@ public final class JsonReceiver {
         return receiver;
     }
 
-    public void setUrl(String url) throws MalformedURLException {
-        this.url = new URL(url);
+    public void setUrl(URL url) throws MalformedURLException {
+        this.url = url;
     }
 
-    public Object executeGETCall(String command) throws JSONException {
+    public Object executeGETCall() throws JSONException {
         Object json = null;
         HttpURLConnection httpURLConnection = null;
         try {
@@ -56,9 +56,9 @@ public final class JsonReceiver {
             //add request header
             httpURLConnection.setRequestProperty("User-Agent", USER_AGENT);
 
-            //int responseCode = httpURLConnection.getResponseCode();
-            //System.out.println("\nSending 'GET' request to URL : " + url);
-            //System.out.println("Response Code : " + responseCode);
+            int responseCode = httpURLConnection.getResponseCode();
+            System.out.println("\nSending 'GET' request to URL : " + url);
+            System.out.println("Response Code : " + responseCode);
 
             BufferedReader in = new BufferedReader(new InputStreamReader(httpURLConnection.getInputStream()));
 
